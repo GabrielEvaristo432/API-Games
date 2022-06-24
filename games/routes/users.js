@@ -7,32 +7,32 @@ ObjectID = require('mongodb').ObjectID;
 /* GET users listing. */
 router.get('/', async function (req, res) {
   const conn = await db.connect();
-  const games = conn.collection('game');
-  const docs = await games.find().toArray();
+  const users = conn.collection('users');
+  const docs = await users.find().toArray();
   res.json(docs)
 });
 
 router.get('/:_id', async function (req, res) {
   const conn = await db.connect();
-  const games = conn.collection('game');
+  const users = conn.collection('users');
   const _id = req.params._id;
-  const doc = await games.findOne({ _id: ObjectID(_id) });
+  const doc = await users.findOne({ _id: ObjectID(_id) });
   res.json(doc)
 });
 
 router.post('/', async function (req, res) {
   const conn = await db.connect();
-  const games = conn.collection('game');
-  const response = await games.insertOne(req.body);
+  const users = conn.collection('users');
+  const response = await users.insertOne(req.body);
   res.status(201); //Recurso criado
   res.send(response);
 });
 
 router.delete('/', async function (req, res) {
   const conn = await db.connect();
-  const games = conn.collection('game');
-  const response = await games.remove({});
-  if(response.deletedCount == 0){
+  const users = conn.collection('users');
+  const response = await users.remove({});
+  if (response.deletedCount == 0) {
     res.status(404);
     res.send()
   } else {
@@ -42,8 +42,8 @@ router.delete('/', async function (req, res) {
 
 router.delete('/:id', async function (req, res) {
   const conn = await db.connect();
-  const games = conn.collection('game');
-  const response = await games.deleteOne({ _id: new ObjectID(req.params.id) })
+  const users = conn.collection('users');
+  const response = await users.deleteOne({ _id: new ObjectID(req.params.id) })
   if (response.deletedCount == 0) {
     res.status(404);
     res.send()
@@ -54,10 +54,10 @@ router.delete('/:id', async function (req, res) {
 
 router.put('/:_id', async function (req, res) {
   const conn = await db.connect();
-  const games = conn.collection('game');
-  const query = {_id: ObjectID(req.params._id)};
-  const values = {$set: req.body}
-  const doc = await games.updateOne(query, values)
+  const users = conn.collection('users');
+  const query = { _id: ObjectID(req.params._id) };
+  const values = { $set: req.body }
+  const doc = await users.updateOne(query, values)
   res.send(doc)
 });
 
@@ -91,7 +91,7 @@ router.put("/", async (req, resp) => {
   }
 
   const conn = await db.connect();
-  const games = conn.collection("games");
+  const users = conn.collection("users");
   let responses = []
   for (let document of documents) {
     let _id = document._id;
@@ -99,7 +99,7 @@ router.put("/", async (req, resp) => {
     const values = { $set: document };
     console.log(values);
     const query = { _id: ObjectID(_id) };
-    const response = await games.updateOne(query, values);
+    const response = await users.updateOne(query, values);
     responses.push(response)
   }
 
